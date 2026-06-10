@@ -182,12 +182,6 @@ function App() {
                     <span />
                   </div>
                 )}
-                {jobState === 'done' && (
-                  <div className="pickup-code">
-                    <span>Recoge con</span>
-                    <strong>42</strong>
-                  </div>
-                )}
                 {jobState === 'ready' && <div className="loaded-note">PDF cargado</div>}
                 {jobState === 'empty' && (
                   <div className="upload-actions">
@@ -203,7 +197,7 @@ function App() {
               </div>
             </section>
 
-            <section className={`options ${jobState === 'done' ? 'delivery-mode' : ''}`}>
+            <section className={`options ${jobState === 'done' ? 'delivery-mode' : ''} ${jobState === 'paying' || jobState === 'printing' ? 'process-mode' : ''}`}>
               {jobState === 'done' ? (
                 <div className="delivery-card">
                   <Check size={32} />
@@ -213,9 +207,20 @@ function App() {
                   </div>
                   <b>42</b>
                 </div>
+              ) : jobState === 'paying' || jobState === 'printing' ? (
+                <div className="process-card">
+                  {jobState === 'paying' ? <CreditCard size={32} /> : <Printer size={32} />}
+                  <div>
+                    <strong>{jobState === 'paying' ? 'Pagando' : 'Imprimiendo'}</strong>
+                    <span>{jobState === 'paying' ? 'Pago demo aceptado' : 'Tus hojas estan saliendo'}</span>
+                  </div>
+                  <div className="process-card-bar">
+                    <span />
+                  </div>
+                </div>
               ) : (
                 <>
-                  <div className={`payment-box ${jobState === 'paying' || jobState === 'printing' ? 'paid' : ''}`}>
+                  <div className="payment-box">
                     <CreditCard size={18} />
                     <div>
                       <strong>{jobState === 'empty' ? 'Pago pendiente' : jobState === 'ready' ? 'Pago demo' : 'Pago aprobado'}</strong>

@@ -570,37 +570,6 @@ h2 {
   animation: progress-sweep 1.05s ease-in-out infinite;
 }
 
-.pickup-code {
-  width: min(260px, 100%);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 14px;
-  padding: 10px 14px;
-  color: var(--ink);
-  background: white;
-  border: 3px solid var(--uabc-green);
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  font-weight: 950;
-}
-
-.pickup-code span {
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 11px;
-}
-
-.pickup-code strong {
-  width: 58px;
-  height: 58px;
-  display: grid;
-  place-items: center;
-  color: white;
-  background: var(--uabc-green);
-  font-size: 34px;
-  line-height: 1;
-}
-
 .loaded-note {
   width: fit-content;
   padding: 9px 12px;
@@ -709,6 +678,12 @@ h2 {
   background: #ecf7ef;
 }
 
+.options.process-mode {
+  justify-content: center;
+  border-color: var(--uabc-green);
+  background: var(--uabc-green);
+}
+
 .delivery-card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -748,6 +723,44 @@ h2 {
   background: var(--uabc-gold);
   font-size: clamp(42px, 6vw, 78px);
   line-height: 1;
+}
+
+.process-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: white;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.process-card strong,
+.process-card span {
+  display: block;
+}
+
+.process-card strong {
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 0.95;
+}
+
+.process-card span {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 900;
+}
+
+.process-card-bar {
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.process-card-bar span {
+  width: 44%;
+  height: 100%;
+  background: var(--uabc-gold);
+  animation: progress-sweep 1.05s ease-in-out infinite;
 }
 
 .option-row {
@@ -1120,17 +1133,6 @@ h2 {
     bottom: 10px;
     padding: 6px 8px;
     font-size: 10px;
-  }
-
-  .pickup-code {
-    width: 100%;
-    padding: 8px 10px;
-  }
-
-  .pickup-code strong {
-    width: 48px;
-    height: 48px;
-    font-size: 29px;
   }
 
   h2 {
