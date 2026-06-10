@@ -24,9 +24,9 @@ const pesos = new Intl.NumberFormat('es-MX', {
 })
 
 const steps = [
-  { label: 'Subir', hint: 'PDF listo' },
-  { label: 'Pagar', hint: 'Pago simple' },
-  { label: 'Recoger', hint: 'Codigo final' },
+  { label: 'PDF', hint: 'Archivo' },
+  { label: 'Pago', hint: 'Pagar' },
+  { label: 'Recoge', hint: 'Codigo' },
 ]
 
 function App() {
@@ -65,9 +65,9 @@ function App() {
   }, [fileName, jobState])
 
   const mainMessage = useMemo(() => {
-    if (jobState === 'done') return 'Listo para recoger'
-    if (jobState === 'printing') return 'Imprimiendo ahora'
-    if (jobState === 'paying') return 'Pago aprobado'
+    if (jobState === 'done') return 'Recoge tus hojas'
+    if (jobState === 'printing') return 'Imprimiendo'
+    if (jobState === 'paying') return 'Pago listo'
     return fileName || 'PDF aqui'
   }, [fileName, jobState])
 
@@ -120,10 +120,12 @@ function App() {
           <a className="apoapps-link" href="https://apoapps.com" target="_blank" rel="noreferrer">
             by Apoapps
           </a>
-          <div className="status-pill">
-            <Printer size={16} strokeWidth={2.3} />
-            <span>{status}</span>
-          </div>
+          {jobState !== 'printing' && jobState !== 'paying' && (
+            <div className="status-pill">
+              <Printer size={16} strokeWidth={2.3} />
+              <span>{status}</span>
+            </div>
+          )}
         </div>
       </header>
 
@@ -152,7 +154,7 @@ function App() {
             </button>
           </div>
 
-          <div className="flow-grid">
+          <div className={`flow-grid ${jobState === 'paying' || jobState === 'printing' ? 'single-card' : ''}`}>
             <section className={`upload-zone stage-${jobState}`}>
               <PdfPreview color={color} jobState={jobState} fileName={fileName} />
               <div className="stage-copy">
@@ -167,14 +169,14 @@ function App() {
                   <h2>{mainMessage}</h2>
                   <p>
                     {jobState === 'done'
-                      ? 'Ve por tus hojas'
+                      ? 'Ya estan listas'
                       : jobState === 'printing'
-                        ? 'Tus hojas estan saliendo'
+                        ? 'Espera aqui'
                         : jobState === 'paying'
-                          ? 'Tarjeta demo aceptada'
+                          ? 'Espera aqui'
                           : fileName
-                            ? `${pages} paginas detectadas`
-                            : 'Solo archivo PDF'}
+                            ? `${pages} paginas`
+                            : 'Elige un PDF'}
                   </p>
                 </div>
                 {(jobState === 'printing' || jobState === 'paying') && (
@@ -197,34 +199,24 @@ function App() {
               </div>
             </section>
 
-            <section className={`options ${jobState === 'done' ? 'delivery-mode' : ''} ${jobState === 'paying' || jobState === 'printing' ? 'process-mode' : ''}`}>
+            {jobState !== 'paying' && jobState !== 'printing' && (
+            <section className={`options ${jobState === 'done' ? 'delivery-mode' : ''}`}>
               {jobState === 'done' ? (
                 <div className="delivery-card">
                   <Check size={32} />
                   <div>
-                    <strong>Entregado</strong>
-                    <span>Toma tus hojas</span>
+                    <strong>Listo</strong>
+                    <span>Codigo</span>
                   </div>
                   <b>42</b>
-                </div>
-              ) : jobState === 'paying' || jobState === 'printing' ? (
-                <div className="process-card">
-                  {jobState === 'paying' ? <CreditCard size={32} /> : <Printer size={32} />}
-                  <div>
-                    <strong>{jobState === 'paying' ? 'Pagando' : 'Imprimiendo'}</strong>
-                    <span>{jobState === 'paying' ? 'Pago demo aceptado' : 'Tus hojas estan saliendo'}</span>
-                  </div>
-                  <div className="process-card-bar">
-                    <span />
-                  </div>
                 </div>
               ) : (
                 <>
                   <div className="payment-box">
                     <CreditCard size={18} />
                     <div>
-                      <strong>{jobState === 'empty' ? 'Pago pendiente' : jobState === 'ready' ? 'Pago demo' : 'Pago aprobado'}</strong>
-                      <span>{jobState === 'ready' ? 'Toca Pagar' : jobState === 'empty' ? 'Sube PDF' : pesos.format(total)}</span>
+                      <strong>{jobState === 'empty' ? 'Sin pago' : 'Paga ahora'}</strong>
+                      <span>{jobState === 'ready' ? pesos.format(total) : 'Sube PDF'}</span>
                     </div>
                   </div>
                   <div className="option-row">
@@ -268,6 +260,7 @@ function App() {
                 </>
               )}
             </section>
+            )}
           </div>
 
           <footer className="bottom-strip">
@@ -284,7 +277,7 @@ function App() {
               {jobState === 'done'
                 ? 'Listo'
                 : jobState === 'printing'
-                  ? 'Imprimiendo'
+                  ? 'Procesando'
                   : jobState === 'paying'
                     ? 'Pagando'
                     : 'Pagar demo'}
@@ -307,12 +300,12 @@ function App() {
             <Line label="Total" value={pesos.format(total)} strong />
           </div>
 
-          <div className={`pickup ${jobState === 'done' ? 'ready' : ''} ${jobState === 'printing' ? 'printing' : ''}`}>
-            <div className="qr-box">
-              {jobState === 'done' ? <Check size={46} /> : jobState === 'printing' ? <Printer size={46} /> : <QrCode size={46} />}
+          {jobState !== 'done' && (
+            <div className={`pickup ${jobState === 'printing' ? 'printing' : ''}`}>
+              <div className="qr-box">{jobState === 'printing' ? <Printer size={46} /> : <QrCode size={46} />}</div>
+              <p>{jobState === 'printing' ? 'En proceso' : 'Pago primero'}</p>
             </div>
-            <p>{jobState === 'done' ? 'Codigo 42' : jobState === 'printing' ? 'Imprimiendo' : 'Pago primero'}</p>
-          </div>
+          )}
 
           <div className="machine">
             <Printer size={22} />
