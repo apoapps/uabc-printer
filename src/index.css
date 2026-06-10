@@ -1019,22 +1019,32 @@ h2 {
 
 @media (max-width: 680px) {
   .topbar {
-    height: 60px;
-    flex-basis: 60px;
+    height: 52px;
+    flex-basis: 52px;
+    gap: 8px;
+    padding: 6px 10px;
   }
 
   .brand-mark {
-    width: 34px;
-    height: 42px;
+    width: 30px;
+    height: 38px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-title {
+    font-size: 17px;
   }
 
   .status-pill {
-    padding: 7px 8px;
+    padding: 7px;
   }
 
   .apoapps-link {
-    padding: 8px;
-    font-size: 12px;
+    padding: 7px 8px;
+    font-size: 11px;
   }
 
   .status-pill span {
@@ -1043,13 +1053,13 @@ h2 {
 
   .workspace {
     grid-template-columns: 1fr;
-    grid-template-rows: 54px minmax(0, 1fr);
-    padding: 8px;
-    gap: 8px;
+    grid-template-rows: 44px minmax(0, 1fr);
+    padding: 6px;
+    gap: 6px;
   }
 
   .step-rail {
-    height: 54px;
+    height: 44px;
     min-height: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1059,7 +1069,8 @@ h2 {
   .step-item {
     flex-direction: row;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
+    padding: 6px;
     border-bottom: 0;
     border-right: 1px solid var(--line);
   }
@@ -1069,40 +1080,47 @@ h2 {
   }
 
   .step-item span {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 
   .panel-head {
-    padding: 12px;
+    padding: 9px 10px;
+  }
+
+  .kicker {
+    font-size: 9px;
   }
 
   h1 {
-    font-size: clamp(30px, 10vw, 44px);
+    font-size: clamp(28px, 8.5vw, 34px);
+    line-height: 0.9;
   }
 
   .flow-grid {
     grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 8px;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 6px;
   }
 
   .flow-grid.single-card .upload-zone {
-    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-columns: 96px minmax(0, 1fr);
   }
 
   .upload-zone {
-    grid-template-columns: 112px minmax(0, 1fr);
-    gap: 10px;
-    padding: 14px;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 8px;
+    padding: 10px;
+    align-content: center;
   }
 
   .stage-copy {
-    gap: 8px;
+    gap: 7px;
   }
 
   .pdf-preview {
-    width: 104px;
+    width: 88px;
   }
 
   .pdf-paper {
@@ -1136,7 +1154,7 @@ h2 {
   }
 
   .pdf-doc-chart {
-    height: 28px;
+    height: 23px;
     gap: 4px;
   }
 
@@ -1148,12 +1166,17 @@ h2 {
   }
 
   h2 {
-    font-size: clamp(21px, 6.8vw, 32px);
+    font-size: clamp(20px, 6.2vw, 28px);
+  }
+
+  .upload-zone p {
+    margin-top: 5px;
+    font-size: 14px;
   }
 
   .options {
-    gap: 8px;
-    padding: 10px;
+    gap: 6px;
+    padding: 8px;
   }
 
   .payment-box {
@@ -1161,16 +1184,35 @@ h2 {
   }
 
   .bottom-strip {
-    flex-basis: 66px;
-    padding: 8px 10px;
+    flex-basis: 58px;
+    padding: 7px 10px;
   }
 
   .bottom-strip strong {
-    font-size: 25px;
+    font-size: 22px;
   }
 
   .pay-button {
-    min-width: 126px;
+    min-width: 118px;
+    min-height: 42px;
+  }
+
+  .primary-action,
+  .secondary-action {
+    min-height: 40px;
+    padding: 0 13px;
+  }
+
+  .segmented {
+    height: 38px;
+  }
+
+  .stepper {
+    height: 34px;
+  }
+
+  .option-row {
+    font-size: 14px;
   }
 }
 

@@ -212,13 +212,15 @@ function App() {
                 </div>
               ) : (
                 <>
-                  <div className="payment-box">
-                    <CreditCard size={18} />
-                    <div>
-                      <strong>{jobState === 'empty' ? 'Sin pago' : 'Paga ahora'}</strong>
-                      <span>{jobState === 'ready' ? pesos.format(total) : 'Sube PDF'}</span>
+                  {jobState === 'ready' && (
+                    <div className="payment-box">
+                      <CreditCard size={18} />
+                      <div>
+                        <strong>Paga ahora</strong>
+                        <span>{pesos.format(total)}</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="option-row">
                     <span>Copias</span>
                     <div className="stepper">
