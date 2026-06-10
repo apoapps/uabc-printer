@@ -203,54 +203,65 @@ function App() {
               </div>
             </section>
 
-            <section className="options">
-              <div className={`payment-box ${jobState === 'paying' || jobState === 'printing' || jobState === 'done' ? 'paid' : ''}`}>
-                <CreditCard size={18} />
-                <div>
-                  <strong>
-                    {jobState === 'empty' ? 'Pago pendiente' : jobState === 'ready' ? 'Pago demo' : 'Pago aprobado'}
-                  </strong>
-                  <span>{jobState === 'ready' ? 'Toca Pagar' : jobState === 'empty' ? 'Sube PDF' : pesos.format(total)}</span>
+            <section className={`options ${jobState === 'done' ? 'delivery-mode' : ''}`}>
+              {jobState === 'done' ? (
+                <div className="delivery-card">
+                  <Check size={32} />
+                  <div>
+                    <strong>Entregado</strong>
+                    <span>Toma tus hojas</span>
+                  </div>
+                  <b>42</b>
                 </div>
-              </div>
-              <div className="option-row">
-                <span>Copias</span>
-                <div className="stepper">
-                  <button
-                    type="button"
-                    aria-label="Menos copias"
-                    onClick={() => setCopies((value) => Math.max(1, value - 1))}
-                  >
-                    <Minus size={15} />
-                  </button>
-                  <strong>{copies}</strong>
-                  <button
-                    type="button"
-                    aria-label="Mas copias"
-                    onClick={() => setCopies((value) => Math.min(20, value + 1))}
-                  >
-                    <Plus size={15} />
-                  </button>
-                </div>
-              </div>
+              ) : (
+                <>
+                  <div className={`payment-box ${jobState === 'paying' || jobState === 'printing' ? 'paid' : ''}`}>
+                    <CreditCard size={18} />
+                    <div>
+                      <strong>{jobState === 'empty' ? 'Pago pendiente' : jobState === 'ready' ? 'Pago demo' : 'Pago aprobado'}</strong>
+                      <span>{jobState === 'ready' ? 'Toca Pagar' : jobState === 'empty' ? 'Sube PDF' : pesos.format(total)}</span>
+                    </div>
+                  </div>
+                  <div className="option-row">
+                    <span>Copias</span>
+                    <div className="stepper">
+                      <button
+                        type="button"
+                        aria-label="Menos copias"
+                        onClick={() => setCopies((value) => Math.max(1, value - 1))}
+                      >
+                        <Minus size={15} />
+                      </button>
+                      <strong>{copies}</strong>
+                      <button
+                        type="button"
+                        aria-label="Mas copias"
+                        onClick={() => setCopies((value) => Math.min(20, value + 1))}
+                      >
+                        <Plus size={15} />
+                      </button>
+                    </div>
+                  </div>
 
-              <div className="segmented" aria-label="Color">
-                <button type="button" className={color === 'bn' ? 'selected' : ''} onClick={() => setColor('bn')}>
-                  B/N
-                </button>
-                <button type="button" className={color === 'color' ? 'selected' : ''} onClick={() => setColor('color')}>
-                  Color
-                </button>
-              </div>
+                  <div className="segmented" aria-label="Color">
+                    <button type="button" className={color === 'bn' ? 'selected' : ''} onClick={() => setColor('bn')}>
+                      B/N
+                    </button>
+                    <button type="button" className={color === 'color' ? 'selected' : ''} onClick={() => setColor('color')}>
+                      Color
+                    </button>
+                  </div>
 
-              <div className="segmented" aria-label="Lados">
-                <button type="button" className={side === 'one' ? 'selected' : ''} onClick={() => setSide('one')}>
-                  1 lado
-                </button>
-                <button type="button" className={side === 'two' ? 'selected' : ''} onClick={() => setSide('two')}>
-                  2 lados
-                </button>
-              </div>
+                  <div className="segmented" aria-label="Lados">
+                    <button type="button" className={side === 'one' ? 'selected' : ''} onClick={() => setSide('one')}>
+                      1 lado
+                    </button>
+                    <button type="button" className={side === 'two' ? 'selected' : ''} onClick={() => setSide('two')}>
+                      2 lados
+                    </button>
+                  </div>
+                </>
+              )}
             </section>
           </div>
 
