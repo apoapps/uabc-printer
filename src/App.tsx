@@ -113,7 +113,7 @@ function App() {
         <div className="brand">
           <img src="/uabc-escudo.png" alt="Escudo UABC" className="brand-mark" />
           <div>
-            <p className="brand-title">Imprimir en UABC</p>
+            <p className="brand-title">Impresiones UABC</p>
           </div>
         </div>
         <div className="topbar-actions">
