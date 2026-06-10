@@ -114,12 +114,16 @@ function App() {
           <img src="/uabc-escudo.png" alt="Escudo UABC" className="brand-mark" />
           <div>
             <p className="brand-title">Imprimir en UABC</p>
-            <p className="brand-subtitle">Prototipo</p>
           </div>
         </div>
-        <div className="status-pill">
-          <Printer size={16} strokeWidth={2.3} />
-          <span>{status}</span>
+        <div className="topbar-actions">
+          <a className="apoapps-link" href="https://apoapps.com" target="_blank" rel="noreferrer">
+            by Apoapps
+          </a>
+          <div className="status-pill">
+            <Printer size={16} strokeWidth={2.3} />
+            <span>{status}</span>
+          </div>
         </div>
       </header>
 

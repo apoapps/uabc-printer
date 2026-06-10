@@ -89,7 +89,6 @@ button:disabled {
 }
 
 .brand-title,
-.brand-subtitle,
 .kicker,
 .tiny-label {
   margin: 0;
@@ -104,7 +103,6 @@ button:disabled {
   text-overflow: ellipsis;
 }
 
-.brand-subtitle,
 .kicker,
 .tiny-label {
   font-family: ui-sans-serif, system-ui, sans-serif;
@@ -114,9 +112,29 @@ button:disabled {
   font-weight: 800;
 }
 
-.brand-subtitle {
-  color: rgba(255, 255, 255, 0.82);
-  margin-top: 4px;
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.apoapps-link {
+  min-width: max-content;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  padding: 8px 12px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.apoapps-link:hover {
+  color: var(--ink);
+  background: var(--uabc-gold);
+  border-color: var(--uabc-gold);
 }
 
 .status-pill {
@@ -697,6 +715,11 @@ h2 {
 
   .status-pill {
     padding: 7px 8px;
+  }
+
+  .apoapps-link {
+    padding: 8px;
+    font-size: 12px;
   }
 
   .status-pill span {
