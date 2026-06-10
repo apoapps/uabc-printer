@@ -154,44 +154,53 @@ function App() {
 
           <div className="flow-grid">
             <section className={`upload-zone stage-${jobState}`}>
-              {jobState === 'paying' ? (
-                <CreditCard size={38} strokeWidth={1.8} />
-              ) : jobState === 'printing' || jobState === 'done' ? (
-                <Printer size={40} strokeWidth={1.8} />
-              ) : (
-                <FileUp size={34} strokeWidth={1.8} />
-              )}
-              <div>
-                <h2>{mainMessage}</h2>
-                <p>
-                  {jobState === 'done'
-                    ? 'Ve por tus hojas'
-                    : jobState === 'printing'
-                      ? 'Tus hojas estan saliendo'
-                      : jobState === 'paying'
-                        ? 'Tarjeta demo aceptada'
-                        : fileName
-                          ? `${pages} paginas detectadas`
-                          : 'Solo archivo PDF'}
-                </p>
+              <PdfPreview color={color} jobState={jobState} fileName={fileName} />
+              <div className="stage-copy">
+                {jobState === 'paying' ? (
+                  <CreditCard size={34} strokeWidth={1.8} />
+                ) : jobState === 'printing' || jobState === 'done' ? (
+                  <Printer size={36} strokeWidth={1.8} />
+                ) : (
+                  <FileUp size={32} strokeWidth={1.8} />
+                )}
+                <div>
+                  <h2>{mainMessage}</h2>
+                  <p>
+                    {jobState === 'done'
+                      ? 'Ve por tus hojas'
+                      : jobState === 'printing'
+                        ? 'Tus hojas estan saliendo'
+                        : jobState === 'paying'
+                          ? 'Tarjeta demo aceptada'
+                          : fileName
+                            ? `${pages} paginas detectadas`
+                            : 'Solo archivo PDF'}
+                  </p>
+                </div>
+                {(jobState === 'printing' || jobState === 'paying') && (
+                  <div className="progress-track" aria-label={status}>
+                    <span />
+                  </div>
+                )}
+                {jobState === 'done' && (
+                  <div className="pickup-code">
+                    <span>Recoge con</span>
+                    <strong>42</strong>
+                  </div>
+                )}
+                {jobState === 'ready' && <div className="loaded-note">PDF cargado</div>}
+                {jobState === 'empty' && (
+                  <div className="upload-actions">
+                    <label className="primary-action">
+                      Elegir PDF
+                      <input type="file" accept="application/pdf" onChange={onFileChange} />
+                    </label>
+                    <button className="secondary-action" type="button" onClick={pickDemoFile}>
+                      Demo
+                    </button>
+                  </div>
+                )}
               </div>
-              {(jobState === 'printing' || jobState === 'paying') && (
-                <div className="progress-track" aria-label={status}>
-                  <span />
-                </div>
-              )}
-              {jobState === 'done' && <div className="done-code">Codigo 42</div>}
-              {(jobState === 'empty' || jobState === 'ready') && (
-                <div className="upload-actions">
-                  <label className="primary-action">
-                    Elegir PDF
-                    <input type="file" accept="application/pdf" onChange={onFileChange} />
-                  </label>
-                  <button className="secondary-action" type="button" onClick={pickDemoFile}>
-                    Demo
-                  </button>
-                </div>
-              )}
             </section>
 
             <section className="options">
@@ -257,7 +266,7 @@ function App() {
               disabled={!fileName || jobState === 'paying' || jobState === 'printing' || jobState === 'done'}
             >
               {jobState === 'done'
-                ? 'Codigo 42'
+                ? 'Listo'
                 : jobState === 'printing'
                   ? 'Imprimiendo'
                   : jobState === 'paying'
@@ -299,6 +308,32 @@ function App() {
         </aside>
       </section>
     </main>
+  )
+}
+
+function PdfPreview({ color, jobState, fileName }: { color: PrintColor; jobState: JobState; fileName: string }) {
+  return (
+    <div className={`pdf-preview ${color === 'bn' ? 'mono' : 'full-color'} ${jobState}`}>
+      <div className="pdf-paper">
+        <div className="pdf-topline" />
+        <div className="pdf-title-lines">
+          <span />
+          <span />
+        </div>
+        <div className="pdf-chart">
+          <i />
+          <i />
+          <i />
+        </div>
+        <div className="pdf-lines">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>
+      <div className="pdf-tag">{fileName ? (color === 'bn' ? 'B/N' : 'COLOR') : 'PDF'}</div>
+    </div>
   )
 }
 
