@@ -366,86 +366,134 @@ h2 {
   aspect-ratio: 0.72;
   display: flex;
   flex-direction: column;
-  gap: 11px;
-  padding: 16px;
+  gap: 9px;
+  padding: 14px;
   background: #fffdf8;
   border: 2px solid var(--ink);
   box-shadow: 10px 10px 0 rgba(23, 23, 19, 0.12);
   overflow: hidden;
 }
 
-.pdf-topline {
-  width: 46%;
-  height: 8px;
-  background: var(--ink);
+.pdf-doc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 7px;
+  border-bottom: 2px solid var(--ink);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 950;
 }
 
-.pdf-title-lines {
-  display: grid;
-  gap: 7px;
-}
-
-.pdf-title-lines span,
-.pdf-lines span {
+.pdf-doc-head i {
+  width: 30px;
+  height: 16px;
   display: block;
-  height: 7px;
+  background: var(--uabc-green);
+}
+
+.pdf-doc-title {
+  display: grid;
+  gap: 4px;
+}
+
+.pdf-doc-title b {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.05;
+}
+
+.pdf-doc-title span,
+.pdf-doc-meta span {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 7px;
+  font-weight: 800;
+  color: #5d594f;
+}
+
+.pdf-doc-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.pdf-doc-meta span {
+  padding: 4px;
+  background: #efe8d5;
+}
+
+.pdf-doc-body {
+  display: grid;
+  gap: 5px;
+}
+
+.pdf-doc-body p {
+  margin: 0;
+  display: block;
+  height: 5px;
   background: var(--ink);
 }
 
-.pdf-title-lines span:first-child {
+.pdf-doc-body p:nth-child(1) {
   width: 92%;
 }
 
-.pdf-title-lines span:last-child {
-  width: 62%;
+.pdf-doc-body p:nth-child(2) {
+  width: 100%;
 }
 
-.pdf-chart {
+.pdf-doc-body p:nth-child(3) {
+  width: 68%;
+}
+
+.pdf-table {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  align-items: end;
-  gap: 7px;
-  height: 54px;
-  margin: 2px 0;
+  gap: 3px;
 }
 
-.pdf-chart i {
+.pdf-table span {
+  display: block;
+  height: 13px;
+  border: 1px solid #9d9686;
+  background: #f7f2e3;
+}
+
+.pdf-table span:nth-child(1),
+.pdf-table span:nth-child(2),
+.pdf-table span:nth-child(3) {
+  background: var(--ink);
+}
+
+.pdf-doc-chart {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: end;
+  gap: 5px;
+  height: 46px;
+  margin-top: auto;
+}
+
+.pdf-doc-chart i {
   display: block;
   background: var(--ink);
 }
 
-.pdf-chart i:nth-child(1) {
-  height: 42%;
+.pdf-doc-chart i:nth-child(1) {
+  height: 38%;
 }
 
-.pdf-chart i:nth-child(2) {
+.pdf-doc-chart i:nth-child(2) {
   height: 78%;
 }
 
-.pdf-chart i:nth-child(3) {
-  height: 58%;
+.pdf-doc-chart i:nth-child(3) {
+  height: 56%;
 }
 
-.pdf-lines {
-  display: grid;
-  gap: 7px;
-  margin-top: auto;
-}
-
-.pdf-lines span:nth-child(1) {
-  width: 100%;
-}
-
-.pdf-lines span:nth-child(2) {
-  width: 84%;
-}
-
-.pdf-lines span:nth-child(3) {
-  width: 94%;
-}
-
-.pdf-lines span:nth-child(4) {
-  width: 58%;
+.pdf-doc-chart i:nth-child(4) {
+  height: 88%;
 }
 
 .pdf-tag {
@@ -460,28 +508,33 @@ h2 {
   font-weight: 950;
 }
 
-.pdf-preview.full-color .pdf-topline {
-  background: var(--uabc-green);
+.pdf-preview.full-color .pdf-doc-title b {
+  color: var(--uabc-green-dark);
 }
 
-.pdf-preview.full-color .pdf-title-lines span:first-child {
+.pdf-preview.full-color .pdf-doc-meta span:first-child {
   background: var(--uabc-gold);
 }
 
-.pdf-preview.full-color .pdf-title-lines span:last-child {
+.pdf-preview.full-color .pdf-doc-meta span:last-child {
+  color: white;
   background: #1d64d8;
 }
 
-.pdf-preview.full-color .pdf-chart i:nth-child(1) {
+.pdf-preview.full-color .pdf-doc-chart i:nth-child(1) {
   background: #d91f32;
 }
 
-.pdf-preview.full-color .pdf-chart i:nth-child(2) {
+.pdf-preview.full-color .pdf-doc-chart i:nth-child(2) {
   background: var(--uabc-green);
 }
 
-.pdf-preview.full-color .pdf-chart i:nth-child(3) {
+.pdf-preview.full-color .pdf-doc-chart i:nth-child(3) {
   background: #1d64d8;
+}
+
+.pdf-preview.full-color .pdf-doc-chart i:nth-child(4) {
+  background: var(--uabc-gold);
 }
 
 .pdf-preview.full-color .pdf-tag {
@@ -981,25 +1034,38 @@ h2 {
   }
 
   .pdf-paper {
-    padding: 9px;
-    gap: 6px;
+    padding: 8px;
+    gap: 5px;
     border-width: 2px;
     box-shadow: 6px 6px 0 rgba(23, 23, 19, 0.12);
   }
 
-  .pdf-chart {
-    height: 32px;
-    gap: 5px;
+  .pdf-doc-head {
+    padding-bottom: 5px;
+    font-size: 9px;
   }
 
-  .pdf-title-lines,
-  .pdf-lines {
-    gap: 5px;
+  .pdf-doc-head i {
+    width: 22px;
+    height: 12px;
   }
 
-  .pdf-title-lines span,
-  .pdf-lines span {
-    height: 5px;
+  .pdf-doc-title b {
+    font-size: 9px;
+  }
+
+  .pdf-doc-meta,
+  .pdf-table {
+    gap: 2px;
+  }
+
+  .pdf-table span {
+    height: 9px;
+  }
+
+  .pdf-doc-chart {
+    height: 28px;
+    gap: 4px;
   }
 
   .pdf-tag {

@@ -315,21 +315,36 @@ function PdfPreview({ color, jobState, fileName }: { color: PrintColor; jobState
   return (
     <div className={`pdf-preview ${color === 'bn' ? 'mono' : 'full-color'} ${jobState}`}>
       <div className="pdf-paper">
-        <div className="pdf-topline" />
-        <div className="pdf-title-lines">
+        <div className="pdf-doc-head">
+          <span>UABC</span>
+          <i />
+        </div>
+        <div className="pdf-doc-title">
+          <b>Reporte de laboratorio</b>
+          <span>Impresion de prueba</span>
+        </div>
+        <div className="pdf-doc-meta">
+          <span>Alumno</span>
+          <span>Grupo 204</span>
+        </div>
+        <div className="pdf-doc-body">
+          <p />
+          <p />
+          <p />
+        </div>
+        <div className="pdf-table">
+          <span />
+          <span />
+          <span />
+          <span />
           <span />
           <span />
         </div>
-        <div className="pdf-chart">
+        <div className="pdf-doc-chart" aria-hidden="true">
           <i />
           <i />
           <i />
-        </div>
-        <div className="pdf-lines">
-          <span />
-          <span />
-          <span />
-          <span />
+          <i />
         </div>
       </div>
       <div className="pdf-tag">{fileName ? (color === 'bn' ? 'B/N' : 'COLOR') : 'PDF'}</div>
