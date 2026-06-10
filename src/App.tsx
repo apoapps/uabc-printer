@@ -1,7 +1,8 @@
-import { type ChangeEvent, useMemo, useState } from 'react'
+import { type ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Check,
   ChevronRight,
+  CreditCard,
   FileUp,
   Minus,
   Plus,
@@ -14,7 +15,7 @@ import './index.css'
 
 type PrintColor = 'bn' | 'color'
 type PrintSide = 'one' | 'two'
-type JobState = 'empty' | 'ready' | 'printing' | 'done'
+type JobState = 'empty' | 'ready' | 'paying' | 'printing' | 'done'
 
 const pesos = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -22,7 +23,11 @@ const pesos = new Intl.NumberFormat('es-MX', {
   maximumFractionDigits: 0,
 })
 
-const steps = ['Subir', 'Pagar', 'Recoger']
+const steps = [
+  { label: 'Subir', hint: 'PDF listo' },
+  { label: 'Pagar', hint: 'Pago simple' },
+  { label: 'Recoger', hint: 'Codigo final' },
+]
 
 function App() {
   const [fileName, setFileName] = useState('')
@@ -30,6 +35,15 @@ function App() {
   const [color, setColor] = useState<PrintColor>('bn')
   const [side, setSide] = useState<PrintSide>('one')
   const [jobState, setJobState] = useState<JobState>('empty')
+  const timers = useRef<number[]>([])
+
+  useEffect(
+    () => () => {
+      timers.current.forEach((timer) => window.clearTimeout(timer))
+      timers.current = []
+    },
+    [],
+  )
 
   const pages = fileName ? 8 : 0
   const pricePerPage = color === 'color' ? 8 : 2
@@ -38,15 +52,23 @@ function App() {
 
   const currentStep = useMemo(() => {
     if (jobState === 'done' || jobState === 'printing') return 2
-    if (fileName) return 1
+    if (fileName || jobState === 'paying') return 1
     return 0
   }, [fileName, jobState])
 
   const status = useMemo(() => {
     if (jobState === 'done') return 'Listo'
     if (jobState === 'printing') return 'Imprimiendo'
+    if (jobState === 'paying') return 'Pagando'
     if (fileName) return 'Revisa'
     return 'Sube PDF'
+  }, [fileName, jobState])
+
+  const mainMessage = useMemo(() => {
+    if (jobState === 'done') return 'Listo para recoger'
+    if (jobState === 'printing') return 'Imprimiendo ahora'
+    if (jobState === 'paying') return 'Pago aprobado'
+    return fileName || 'PDF aqui'
   }, [fileName, jobState])
 
   function pickDemoFile() {
@@ -63,16 +85,26 @@ function App() {
 
   function pay() {
     if (!fileName) return
-    setJobState('printing')
-    window.setTimeout(() => setJobState('done'), 1500)
+    clearSimulation()
+    setJobState('paying')
+    timers.current = [
+      window.setTimeout(() => setJobState('printing'), 900),
+      window.setTimeout(() => setJobState('done'), 3300),
+    ]
   }
 
   function reset() {
+    clearSimulation()
     setFileName('')
     setCopies(1)
     setColor('bn')
     setSide('one')
     setJobState('empty')
+  }
+
+  function clearSimulation() {
+    timers.current.forEach((timer) => window.clearTimeout(timer))
+    timers.current = []
   }
 
   return (
@@ -94,9 +126,13 @@ function App() {
       <section className="workspace">
         <nav className="step-rail" aria-label="Pasos">
           {steps.map((step, index) => (
-            <div className={`step-item ${currentStep === index ? 'active' : ''}`} key={step}>
+            <div
+              className={`step-item ${currentStep === index ? 'active' : ''} ${currentStep > index ? 'done' : ''}`}
+              key={step.label}
+            >
               <span>{index + 1}</span>
-              <strong>{step}</strong>
+              <strong>{step.label}</strong>
+              <small>{step.hint}</small>
             </div>
           ))}
         </nav>
@@ -113,24 +149,57 @@ function App() {
           </div>
 
           <div className="flow-grid">
-            <section className="upload-zone">
-              <FileUp size={34} strokeWidth={1.8} />
+            <section className={`upload-zone stage-${jobState}`}>
+              {jobState === 'paying' ? (
+                <CreditCard size={38} strokeWidth={1.8} />
+              ) : jobState === 'printing' || jobState === 'done' ? (
+                <Printer size={40} strokeWidth={1.8} />
+              ) : (
+                <FileUp size={34} strokeWidth={1.8} />
+              )}
               <div>
-                <h2>{fileName || 'PDF aqui'}</h2>
-                <p>{fileName ? `${pages} paginas detectadas` : 'Solo archivo PDF'}</p>
+                <h2>{mainMessage}</h2>
+                <p>
+                  {jobState === 'done'
+                    ? 'Ve por tus hojas'
+                    : jobState === 'printing'
+                      ? 'Tus hojas estan saliendo'
+                      : jobState === 'paying'
+                        ? 'Tarjeta demo aceptada'
+                        : fileName
+                          ? `${pages} paginas detectadas`
+                          : 'Solo archivo PDF'}
+                </p>
               </div>
-              <div className="upload-actions">
-                <label className="primary-action">
-                  Elegir PDF
-                  <input type="file" accept="application/pdf" onChange={onFileChange} />
-                </label>
-                <button className="secondary-action" type="button" onClick={pickDemoFile}>
-                  Demo
-                </button>
-              </div>
+              {(jobState === 'printing' || jobState === 'paying') && (
+                <div className="progress-track" aria-label={status}>
+                  <span />
+                </div>
+              )}
+              {jobState === 'done' && <div className="done-code">Codigo 42</div>}
+              {(jobState === 'empty' || jobState === 'ready') && (
+                <div className="upload-actions">
+                  <label className="primary-action">
+                    Elegir PDF
+                    <input type="file" accept="application/pdf" onChange={onFileChange} />
+                  </label>
+                  <button className="secondary-action" type="button" onClick={pickDemoFile}>
+                    Demo
+                  </button>
+                </div>
+              )}
             </section>
 
             <section className="options">
+              <div className={`payment-box ${jobState === 'paying' || jobState === 'printing' || jobState === 'done' ? 'paid' : ''}`}>
+                <CreditCard size={18} />
+                <div>
+                  <strong>
+                    {jobState === 'empty' ? 'Pago pendiente' : jobState === 'ready' ? 'Pago demo' : 'Pago aprobado'}
+                  </strong>
+                  <span>{jobState === 'ready' ? 'Toca Pagar' : jobState === 'empty' ? 'Sube PDF' : pesos.format(total)}</span>
+                </div>
+              </div>
               <div className="option-row">
                 <span>Copias</span>
                 <div className="stepper">
@@ -181,9 +250,15 @@ function App() {
               className="pay-button"
               onClick={pay}
               type="button"
-              disabled={!fileName || jobState === 'printing' || jobState === 'done'}
+              disabled={!fileName || jobState === 'paying' || jobState === 'printing' || jobState === 'done'}
             >
-              {jobState === 'done' ? 'Codigo 42' : jobState === 'printing' ? 'Espera' : 'Pagar'}
+              {jobState === 'done'
+                ? 'Codigo 42'
+                : jobState === 'printing'
+                  ? 'Imprimiendo'
+                  : jobState === 'paying'
+                    ? 'Pagando'
+                    : 'Pagar demo'}
               <ChevronRight size={18} />
             </button>
           </footer>
@@ -203,9 +278,11 @@ function App() {
             <Line label="Total" value={pesos.format(total)} strong />
           </div>
 
-          <div className={`pickup ${jobState === 'done' ? 'ready' : ''}`}>
-            <div className="qr-box">{jobState === 'done' ? <Check size={46} /> : <QrCode size={46} />}</div>
-            <p>{jobState === 'done' ? 'Codigo 42' : 'Pago primero'}</p>
+          <div className={`pickup ${jobState === 'done' ? 'ready' : ''} ${jobState === 'printing' ? 'printing' : ''}`}>
+            <div className="qr-box">
+              {jobState === 'done' ? <Check size={46} /> : jobState === 'printing' ? <Printer size={46} /> : <QrCode size={46} />}
+            </div>
+            <p>{jobState === 'done' ? 'Codigo 42' : jobState === 'printing' ? 'Imprimiendo' : 'Pago primero'}</p>
           </div>
 
           <div className="machine">

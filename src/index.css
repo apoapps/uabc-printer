@@ -131,6 +131,10 @@ button:disabled {
   font-weight: 800;
 }
 
+.status-pill svg {
+  animation: press-blink 1s steps(2, end) infinite;
+}
+
 .workspace {
   flex: 1 1 auto;
   min-height: 0;
@@ -163,6 +167,13 @@ button:disabled {
   border-bottom: 1px solid var(--line);
 }
 
+.step-item small {
+  color: var(--muted);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .step-item:last-child {
   border-bottom: 0;
 }
@@ -187,10 +198,24 @@ button:disabled {
   background: var(--uabc-green);
 }
 
+.step-item.done {
+  background: #edf7ef;
+}
+
 .step-item.active span {
   color: var(--ink);
   background: var(--uabc-gold);
   border-color: var(--uabc-gold);
+}
+
+.step-item.active small {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.step-item.done span {
+  color: white;
+  background: var(--uabc-green);
+  border-color: var(--uabc-green);
 }
 
 .work-panel {
@@ -272,11 +297,63 @@ h2 {
   padding: clamp(18px, 3vw, 36px);
 }
 
+.upload-zone.stage-paying,
+.upload-zone.stage-printing,
+.upload-zone.stage-done {
+  border-style: solid;
+  color: white;
+  background: var(--uabc-green);
+}
+
+.upload-zone.stage-printing {
+  animation: print-pulse 0.9s ease-in-out infinite alternate;
+}
+
+.upload-zone.stage-done {
+  color: var(--ink);
+  background: #ecf7ef;
+}
+
 .upload-zone p {
   margin: 10px 0 0;
   color: var(--muted);
   font-family: ui-sans-serif, system-ui, sans-serif;
   font-weight: 700;
+}
+
+.upload-zone.stage-paying p,
+.upload-zone.stage-printing p {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.upload-zone.stage-done p {
+  color: var(--uabc-green-dark);
+}
+
+.progress-track {
+  width: min(420px, 100%);
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.22);
+  overflow: hidden;
+}
+
+.progress-track span {
+  display: block;
+  width: 42%;
+  height: 100%;
+  background: var(--uabc-gold);
+  animation: progress-sweep 1.05s ease-in-out infinite;
+}
+
+.done-code {
+  width: fit-content;
+  padding: 10px 18px;
+  color: white;
+  background: var(--ink);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(18px, 3vw, 34px);
+  font-weight: 950;
 }
 
 .upload-actions {
@@ -327,6 +404,48 @@ h2 {
   padding: 14px;
   border-style: solid;
   border-color: var(--line);
+}
+
+.payment-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  color: var(--ink);
+  background: #f7f2e3;
+  border: 1px solid var(--line);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.payment-box.paid {
+  color: white;
+  background: var(--uabc-green);
+  border-color: var(--uabc-green);
+}
+
+.payment-box div {
+  min-width: 0;
+}
+
+.payment-box strong,
+.payment-box span {
+  display: block;
+}
+
+.payment-box strong {
+  font-size: 15px;
+  line-height: 1.05;
+}
+
+.payment-box span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.payment-box.paid span {
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .option-row {
@@ -466,6 +585,18 @@ h2 {
   background: #ecf7ef;
 }
 
+.pickup.printing {
+  color: white;
+  border-color: var(--uabc-green);
+  background: var(--uabc-green);
+}
+
+.pickup.printing .qr-box {
+  color: var(--uabc-green);
+  border-color: white;
+  animation: press-blink 0.75s steps(2, end) infinite;
+}
+
 .pickup p {
   margin: 0;
   font-family: ui-sans-serif, system-ui, sans-serif;
@@ -503,6 +634,32 @@ h2 {
   font-size: 12px;
 }
 
+@keyframes progress-sweep {
+  0% {
+    transform: translateX(-105%);
+  }
+
+  100% {
+    transform: translateX(245%);
+  }
+}
+
+@keyframes print-pulse {
+  from {
+    background: var(--uabc-green);
+  }
+
+  to {
+    background: #009a42;
+  }
+}
+
+@keyframes press-blink {
+  50% {
+    opacity: 0.42;
+  }
+}
+
 @media (max-width: 920px) {
   .workspace {
     grid-template-columns: 72px minmax(0, 1fr);
@@ -520,6 +677,10 @@ h2 {
   .step-item strong {
     font-size: 12px;
     font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .step-item small {
+    display: none;
   }
 }
 
@@ -602,6 +763,10 @@ h2 {
     padding: 10px;
   }
 
+  .payment-box {
+    padding: 9px 10px;
+  }
+
   .bottom-strip {
     flex-basis: 66px;
     padding: 8px 10px;
@@ -612,7 +777,7 @@ h2 {
   }
 
   .pay-button {
-    min-width: 112px;
+    min-width: 126px;
   }
 }
 
@@ -646,6 +811,10 @@ h2 {
   .upload-zone {
     gap: 10px;
     padding: 14px;
+  }
+
+  .payment-box {
+    padding: 8px 10px;
   }
 
   .bottom-strip {
